@@ -20,10 +20,15 @@ import androidx.compose.ui.unit.dp
 import com.oganbelema.hellocomposev.R
 import com.oganbelema.hellocomposev.components.NoteButton
 import com.oganbelema.hellocomposev.components.NoteInputText
+import com.oganbelema.hellocomposev.model.Note
 
 @ExperimentalComposeUiApi
 @Composable
-fun NoteScreen() {
+fun NoteScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
+) {
     val title = remember {
         mutableStateOf("")
     }
@@ -72,7 +77,12 @@ fun NoteScreen() {
 
             NoteButton(text = stringResource(id = R.string.save),
                 onClick = {
+                    if (title.value.isNotEmpty() && description.value.isNotEmpty()){
+                        //save/add to the list
 
+                        title.value = ""
+                        description.value = ""
+                    }
                 })
         }
     }
@@ -82,5 +92,5 @@ fun NoteScreen() {
 @Preview(showBackground = true)
 @Composable
 fun NoteScreenPreview() {
-    NoteScreen()
+    NoteScreen(notes = emptyList(), onAddNote = {}, onRemoveNote = {})
 }
