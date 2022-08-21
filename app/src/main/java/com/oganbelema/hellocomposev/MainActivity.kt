@@ -3,18 +3,15 @@ package com.oganbelema.hellocomposev
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.oganbelema.hellocomposev.data.NoteDataSource
-import com.oganbelema.hellocomposev.model.Note
 import com.oganbelema.hellocomposev.screen.NoteScreen
 import com.oganbelema.hellocomposev.ui.theme.HelloComposeVTheme
 import com.oganbelema.hellocomposev.viewmodels.NoteViewModel
@@ -33,7 +30,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    NoteApp()
+                    val noteViewModel by viewModels<NoteViewModel>()
+                    NoteApp(noteViewModel)
                 }
             }
         }
@@ -43,9 +41,11 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalComposeUiApi
 @Composable
-fun NoteApp(noteViewModel: NoteViewModel = viewModel()) {
+fun NoteApp(noteViewModel: NoteViewModel) {
+    val notes = noteViewModel.noteList.collectAsState().value
+
     NoteScreen(
-        notes = noteViewModel.getAllNotes(),
+        notes = notes,
         onAddNote = {
             noteViewModel.addNote(it)
         }, onRemoveNote = {
