@@ -17,7 +17,11 @@ class NoteRepository @Inject constructor(private val noteDao: NoteDao) {
 
     suspend fun deleteAllNotes() = noteDao.deleteAllNotes()
 
-    suspend fun getNote(id: String) = noteDao.getNoteById(id)
+    fun getNote(id: String): Flow<Note> {
+        return noteDao.getNoteById(id)
+            .flowOn(Dispatchers.IO)
+            .conflate()
+    }
 
     fun getAllNotes(): Flow<List<Note>> {
         return noteDao.getNotes()
