@@ -88,9 +88,7 @@ fun NoteScreen(
                 text = description.value,
                 label = stringResource(id = R.string.add_a_note),
                 onTextChange = {
-                    if (it.all { character ->
-                            character.isLetter() || character.isWhitespace()
-                        }) description.value = it
+                    description.value = it
                 })
 
             NoteButton(text = stringResource(id = R.string.save),
