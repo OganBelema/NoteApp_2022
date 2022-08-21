@@ -1,27 +1,57 @@
 package com.oganbelema.hellocomposev.viewmodels
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.oganbelema.hellocomposev.data.NoteDataSource
+import androidx.lifecycle.viewModelScope
 import com.oganbelema.hellocomposev.model.Note
+import com.oganbelema.hellocomposev.repository.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NoteViewModel: ViewModel() {
+@HiltViewModel
+class NoteViewModel @Inject constructor(private val repository: NoteRepository): ViewModel() {
 
-    private var noteList = mutableStateListOf<Note>()
+    private val _noteList = MutableStateFlow<List<Note>>(emptyList())
+    val noteList: StateFlow<List<Note>> = _noteList.asStateFlow()
+
+    private val _note = MutableStateFlow<Note?>(null)
+    val note = _note.asStateFlow()
+
 
     init {
-        noteList.addAll(NoteDataSource().loadNotes())
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getAllNotes().distinctUntilChanged()
+                .collect { notes ->
+                    _noteList.value = notes
+                }
+        }
     }
 
-    fun addNote(note: Note) {
-        noteList.add(note)
+    fun getNote(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getNote(id).distinctUntilChanged()
+                .collect { note ->
+                    _note.value = note
+                }
+        }
     }
 
-    fun removeNote(note: Note) {
-        noteList.remove(note)
+    fun addNote(note: Note) = viewModelScope.launch {
+        repository.addNote(note)
     }
 
-    fun getAllNotes(): List<Note> {
-        return noteList
+    fun updateNote(note: Note) = viewModelScope.launch {
+        repository.updateNote(note)
     }
+
+    fun removeNote(note: Note) = viewModelScope.launch {
+        repository.deleteNote(note)
+    }
+
+    fun deleteAllNote() = viewModelScope.launch {
+        repository.deleteAllNotes()
+    }
+
 }
