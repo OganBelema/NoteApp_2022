@@ -28,6 +28,7 @@ import com.oganbelema.hellocomposev.R
 import com.oganbelema.hellocomposev.components.NoteButton
 import com.oganbelema.hellocomposev.components.NoteInputText
 import com.oganbelema.hellocomposev.data.NoteDataSource
+import com.oganbelema.hellocomposev.formatDate
 import com.oganbelema.hellocomposev.model.Note
 import java.time.format.DateTimeFormatter
 
@@ -145,8 +146,7 @@ fun NoteRow(
             
             Text(text = note.description, style = MaterialTheme.typography.subtitle1)
             
-            /*Text(text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")),
-            style = MaterialTheme.typography.caption)*/
+            Text(text = note.entryDate.formatDate(), style = MaterialTheme.typography.caption)
         }
     }
 }
