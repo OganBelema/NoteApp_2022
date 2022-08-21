@@ -15,11 +15,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.oganbelema.hellocomposev.R
+import com.oganbelema.hellocomposev.data.NoteDataSource
 import com.oganbelema.hellocomposev.model.Note
 
-
+@Preview
 @Composable
-fun NoteDetailScreen(modifier: Modifier = Modifier, note: Note) {
+fun NoteDetailScreen(modifier: Modifier = Modifier, note: Note = NoteDataSource().loadNotes()[0]) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
