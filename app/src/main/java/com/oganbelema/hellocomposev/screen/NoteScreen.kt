@@ -2,7 +2,8 @@ package com.oganbelema.hellocomposev.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,8 +31,8 @@ import com.oganbelema.hellocomposev.components.NoteInputText
 import com.oganbelema.hellocomposev.data.NoteDataSource
 import com.oganbelema.hellocomposev.formatDate
 import com.oganbelema.hellocomposev.model.Note
-import java.time.format.DateTimeFormatter
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 fun NoteScreen(
@@ -109,7 +110,7 @@ fun NoteScreen(
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn {
             items(items = notes) { note ->
-                NoteRow(note = note, onNoteClicked = {
+                NoteRow(note = note, onNoteLongClicked = {
                     onRemoveNote(it)
                 })
             }
@@ -117,12 +118,13 @@ fun NoteScreen(
     }
 }
 
+@ExperimentalFoundationApi
 @SuppressLint("NewApi")
 @Composable
 fun NoteRow(
     modifier: Modifier = Modifier,
     note: Note,
-    onNoteClicked: (Note) -> Unit
+    onNoteLongClicked: (Note) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -134,9 +136,11 @@ fun NoteRow(
     ) {
         Column(
             modifier = modifier
-                .clickable {
-                    onNoteClicked.invoke(note)
-                }
+                .combinedClickable (
+                    onClick = {},
+                    onLongClick = { onNoteLongClicked.invoke(note) }
+
+                )
                 .padding(
                     horizontal = 14.dp,
                     vertical = 6.dp
@@ -151,6 +155,8 @@ fun NoteRow(
     }
 }
 
+
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable
