@@ -81,4 +81,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2"
+
+    //navigation
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 }

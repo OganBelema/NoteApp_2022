@@ -20,7 +20,9 @@ import com.oganbelema.hellocomposev.model.Note
 
 @Preview
 @Composable
-fun NoteDetailScreen(modifier: Modifier = Modifier, note: Note = NoteDataSource().loadNotes()[0]) {
+fun NoteDetailScreen(modifier: Modifier = Modifier,
+                     note: Note = NoteDataSource().loadNotes()[0],
+                     onNavigateBack: () -> Unit = {}) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -31,9 +33,7 @@ fun NoteDetailScreen(modifier: Modifier = Modifier, note: Note = NoteDataSource(
                     Text(text = stringResource(id = R.string.note_detail))
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-
-                    }) {
+                    IconButton(onClick = onNavigateBack) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back arrow")
                     }
                 }
