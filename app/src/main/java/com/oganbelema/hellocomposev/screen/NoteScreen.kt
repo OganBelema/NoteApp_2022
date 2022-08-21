@@ -1,5 +1,7 @@
 package com.oganbelema.hellocomposev.screen
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +38,8 @@ fun NoteScreen(
     onAddNote: (Note) -> Unit,
     onRemoveNote: (Note) -> Unit
 ) {
+    val context = LocalContext.current
+
     val title = remember {
         mutableStateOf("")
     }
@@ -89,9 +94,13 @@ fun NoteScreen(
                 onClick = {
                     if (title.value.isNotEmpty() && description.value.isNotEmpty()) {
                         //save/add to the list
+                        onAddNote(Note(title = title.value,
+                        description = description.value))
 
                         title.value = ""
                         description.value = ""
+                        Toast.makeText(context, context.getString(R.string.note_added),
+                            Toast.LENGTH_SHORT).show()
                     }
                 })
         }
@@ -100,13 +109,14 @@ fun NoteScreen(
         LazyColumn {
             items(items = notes) { note ->
                 NoteRow(note = note, onNoteClicked = {
-
+                    onRemoveNote(it)
                 })
             }
         }
     }
 }
 
+@SuppressLint("NewApi")
 @Composable
 fun NoteRow(
     modifier: Modifier = Modifier,
@@ -124,7 +134,7 @@ fun NoteRow(
         Column(
             modifier = modifier
                 .clickable {
-
+                    onNoteClicked.invoke(note)
                 }
                 .padding(
                     horizontal = 14.dp,
