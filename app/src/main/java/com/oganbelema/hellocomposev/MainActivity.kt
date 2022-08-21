@@ -18,9 +18,11 @@ import com.oganbelema.hellocomposev.model.Note
 import com.oganbelema.hellocomposev.screen.NoteScreen
 import com.oganbelema.hellocomposev.ui.theme.HelloComposeVTheme
 import com.oganbelema.hellocomposev.viewmodels.NoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
 @ExperimentalComposeUiApi
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
