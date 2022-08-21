@@ -12,10 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.oganbelema.hellocomposev.data.NoteDataSource
 import com.oganbelema.hellocomposev.model.Note
 import com.oganbelema.hellocomposev.screen.NoteScreen
 import com.oganbelema.hellocomposev.ui.theme.HelloComposeVTheme
+import com.oganbelema.hellocomposev.viewmodels.NoteViewModel
 
 
 @ExperimentalComposeUiApi
@@ -29,15 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val notes = remember {
-                        mutableStateListOf<Note>().apply {
-                            addAll(NoteDataSource().loadNotes())
-                        }
-                    }
-
-                    NoteScreen(notes = notes,
-                        onAddNote = { notes.add(it) },
-                        onRemoveNote = { notes.remove(it) })
+                    NoteApp()
                 }
             }
         }
@@ -45,10 +39,24 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@ExperimentalComposeUiApi
+@Composable
+fun NoteApp(noteViewModel: NoteViewModel = viewModel()) {
+    NoteScreen(
+        notes = noteViewModel.getAllNotes(),
+        onAddNote = {
+            noteViewModel.addNote(it)
+        }, onRemoveNote = {
+            noteViewModel.removeNote(it)
+        })
+}
 
+
+@ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     HelloComposeVTheme {
+        NoteApp()
     }
 }
