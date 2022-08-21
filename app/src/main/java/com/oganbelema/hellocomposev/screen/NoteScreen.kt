@@ -38,7 +38,8 @@ import com.oganbelema.hellocomposev.model.Note
 fun NoteScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
-    onRemoveNote: (Note) -> Unit
+    onRemoveNote: (Note) -> Unit,
+    onNoteClicked: (Note) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -112,6 +113,8 @@ fun NoteScreen(
             items(items = notes) { note ->
                 NoteRow(note = note, onNoteLongClicked = {
                     onRemoveNote(it)
+                }, onNoteClicked = {
+                    onNoteClicked(it)
                 })
             }
         }
@@ -124,7 +127,8 @@ fun NoteScreen(
 fun NoteRow(
     modifier: Modifier = Modifier,
     note: Note,
-    onNoteLongClicked: (Note) -> Unit
+    onNoteLongClicked: (Note) -> Unit,
+    onNoteClicked: (Note) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -137,7 +141,7 @@ fun NoteRow(
         Column(
             modifier = modifier
                 .combinedClickable (
-                    onClick = {},
+                    onClick = { onNoteClicked.invoke(note) },
                     onLongClick = { onNoteLongClicked.invoke(note) }
 
                 )
@@ -161,5 +165,6 @@ fun NoteRow(
 @Preview(showBackground = true)
 @Composable
 fun NoteScreenPreview() {
-    NoteScreen(notes = NoteDataSource().loadNotes(), onAddNote = {}, onRemoveNote = {})
+    NoteScreen(notes = NoteDataSource().loadNotes(), onAddNote = {}, onRemoveNote = {},
+        onNoteClicked = {})
 }

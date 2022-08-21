@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.oganbelema.hellocomposev.screen.NoteScreen
+import com.oganbelema.hellocomposev.navigation.MyAppNaVHost
 import com.oganbelema.hellocomposev.ui.theme.HelloComposeVTheme
 import com.oganbelema.hellocomposev.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,15 +44,7 @@ class MainActivity : ComponentActivity() {
 @ExperimentalComposeUiApi
 @Composable
 fun NoteApp(noteViewModel: NoteViewModel) {
-    val notes = noteViewModel.noteList.collectAsState().value
-
-    NoteScreen(
-        notes = notes,
-        onAddNote = {
-            noteViewModel.addNote(it)
-        }, onRemoveNote = {
-            noteViewModel.removeNote(it)
-        })
+    MyAppNaVHost(viewModel = noteViewModel)
 }
 
 
@@ -62,6 +53,6 @@ fun NoteApp(noteViewModel: NoteViewModel) {
 @Composable
 fun DefaultPreview() {
     HelloComposeVTheme {
-        NoteApp()
+
     }
 }

@@ -21,7 +21,8 @@ import com.oganbelema.hellocomposev.model.Note
 @Preview
 @Composable
 fun NoteDetailScreen(modifier: Modifier = Modifier,
-                     note: Note = NoteDataSource().loadNotes()[0],
+                     noteId: String? = "",
+                     note: Note? = NoteDataSource().loadNotes()[0],
                      onNavigateBack: () -> Unit = {}) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -46,16 +47,17 @@ fun NoteDetailScreen(modifier: Modifier = Modifier,
 
 
 @Composable
-fun NoteInfoColumn(modifier: Modifier = Modifier, note: Note) {
+fun NoteInfoColumn(modifier: Modifier = Modifier, note: Note?) {
     Column(modifier = modifier
         .padding(8.dp)
         .fillMaxSize(), 
         verticalArrangement = Arrangement.Top, 
         horizontalAlignment = Alignment.Start) {
         
-        Text(text = note.title, style = MaterialTheme.typography.h5)
+        Text(modifier = modifier.padding(bottom = 8.dp),
+            text = note?.title ?: "", style = MaterialTheme.typography.h5)
         
-        Text(text = note.description, style = MaterialTheme.typography.body1)
+        Text(text = note?.description ?: "", style = MaterialTheme.typography.body1,)
 
     }
 
